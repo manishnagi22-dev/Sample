@@ -82,7 +82,7 @@
             gap: 12px;
             position: absolute;
             width: 100%;
-            animation: verticalMarquee 35s linear infinite;
+            animation: verticalMarquee 25s linear infinite;
         }
 
         .ticker-track:hover {
@@ -121,6 +121,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
+            height: 750px;
         }
 
         h1 { margin: 0 0 5px 0; font-size: 28px; color: #fff; font-weight: 800; letter-spacing: -0.5px; }
@@ -163,7 +164,7 @@
 
         /* App Layout Sections switching */
         .app-view { display: none; }
-        .active-view { display: block; }
+        .active-view { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 
         /* Instant Search filter interface components */
         .search-container { margin-bottom: 20px; }
@@ -185,10 +186,11 @@
 
         /* Elegant Grid Table Interface Matrix */
         .table-scroll {
-            max-height: 480px;
+            flex: 1;
             overflow-y: auto;
             border: 1px solid var(--border-color);
             border-radius: 8px;
+            background: #0f1420;
         }
 
         table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
@@ -208,6 +210,7 @@
 
         td { padding: 14px; border-bottom: 1px solid var(--border-color); vertical-align: top; line-height: 1.5; }
         tr:hover { background-color: rgba(16, 124, 65, 0.04); }
+        tr.hidden-row { display: none; }
 
         .tag-badge {
             display: inline-block;
@@ -250,6 +253,7 @@
             display: flex;
             align-items: center;
             margin-bottom: 20px;
+            gap: 10px;
         }
 
         .fx-indicator {
@@ -258,7 +262,6 @@
             font-weight: 900;
             color: var(--cyber-green);
             font-size: 22px;
-            margin-right: 15px;
             user-select: none;
         }
 
@@ -276,23 +279,35 @@
             background-color: var(--neon-green);
             color: white;
             border: none;
-            padding: 15px;
-            font-size: 15px;
-            font-weight: bold;
+            padding: 10px 20px;
+            font-size: 14px;
+            font-weight: 700;
             border-radius: 6px;
             cursor: pointer;
-            width: 100%;
-            transition: 0.2s;
+            transition: all 0.2s;
+            white-space: nowrap;
+        }
+        
+        .evaluate-action-btn:hover {
+            background-color: var(--cyber-green);
             box-shadow: var(--text-glow);
         }
-        .evaluate-action-btn:hover { background-color: #185a34; }
 
-        /* Spreadsheet Grid Display Console Panel */
-        .mock-grid { display: grid; grid-template-columns: 90px 1fr; margin-top: 25px; border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden; }
-        .grid-header-node { background: #0f1420; padding: 14px; font-weight: bold; text-align: center; border-right: 1px solid var(--border-color); font-size: 12px; color: #94a3b8; text-transform: uppercase; }
-        .grid-cell-output { padding: 14px; background: #131926; font-size: 20px; font-weight: bold; font-family: 'Consolas', monospace; color: #fff; }
+        /* Console Output Node */
+        .sandbox-output {
+            flex: 1;
+            background: #070a12;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            font-family: 'Consolas', monospace;
+            color: #38bdf8;
+            overflow-y: auto;
+            font-size: 14px;
+            line-height: 1.6;
+        }
 
-        /* Vertical Marquee CSS Timeline Loops animation loop profiles */
+        /* Ticker Vertical Loop Animation Keyframe */
         @keyframes verticalMarquee {
             0% { transform: translateY(0); }
             100% { transform: translateY(-50%); }
@@ -301,173 +316,15 @@
 </head>
 <body>
 
-<div class="master-wrapper">
-    
-    <div class="ticker-sidebar">
-        <div class="ticker-title">⚡ Matrix Active Feeds</div>
-        <div class="ticker-container">
-            <div id="marqueeTrack" class="ticker-track"></div>
-        </div>
-    </div>
-
-    <div class="main-workspace">
-        <h1>EXCEL MATRIX INTERFACE</h1>
-        <div class="subtitle">Complete functional core library indexation running an isolated workspace calculation engine</div>
-
-        <div class="menu-nav">
-            <button id="navBtn1" class="nav-btn active-tab" onclick="switchViewSection('reference-view')">📜 MASTER FUNCTION REGISTRY</button>
-            <button id="navBtn2" class="nav-btn" onclick="switchViewSection('calculator-view')">🧮 SANDBOX CALCULATION CELLS</button>
-        </div>
-
-        <div id="reference-view" class="app-view active-view">
-            <div class="search-container">
-                <input type="text" id="filterInput" class="search-input" placeholder="Type terms instantly to decrypt function maps (e.g., INDEX, SUMIFS, XLOOKUP, IF)..." onkeyup="filterRegistryRows()">
-            </div>
-            
-            <div class="table-scroll">
-                <table>
-                    <thead>
-                        <tr>
-                            <th style="width: 28%;">Function Token</th>
-                            <th style="width: 22%;">Classification</th>
-                            <th style="width: 50%;">Blueprint Structural Mechanics & Execution</th>
-                        </tr>
-                    </thead>
-                    <tbody id="registryTableBody"></tbody>
-                </table>
-            </div>
-        </div>
-
-        <div id="calculator-view" class="app-view">
-            <div class="guide-box">
-                <strong>Spreadsheet Sandbox Initialization Matrix:</strong><br>
-                • Code inputs must compile beginning with an equation definition equals character (<code>=</code>).<br>
-                • High-order compound nesting chains are completely functional. Feel free to execute loops like:<br>
-                <code>=SUM(30, 20, MAX(5, 45)) + IF(15 &gt; 10, 200, 0)</code>
-            </div>
-
-            <div class="formula-bar-container">
-                <div class="fx-indicator">fx</div>
-                <input type="text" id="formulaInputLine" class="formula-bar-field" value="=SUM(50, 75) + AVERAGE(20, 40, 60)">
-            </div>
-            
-            <button class="evaluate-action-btn" onclick="processSpreadsheetRuntime()">COMPUTE WORKSPACE COORDINATES</button>
-
-            <div class="mock-grid">
-                <div class="grid-header-node">Cell A1</div>
-                <div id="cellMatrixOutput" class="grid-cell-output"><span style="color:#2ecc71;">165</span></div>
-            </div>
-        </div>
-
-    </div>
-</div>
-
-<script>
-    // Production Core Library Dataset containing beginner and advanced arrays
-    const datasetRegistry = [
-        { name: "SUM", level: "Beginner", desc: "Aggregates a series of continuous numerical entries instantly. Format: SUM(10, 20, 30)" },
-        { name: "AVERAGE", level: "Beginner", desc: "Computes the tracking central mathematical balance average mean value of parameters." },
-        { name: "COUNT", level: "Beginner", desc: "Identifies and counts how many distinct cells hold explicit numbers." },
-        { name: "COUNTA", level: "Beginner", desc: "Scans data paths returning an explicit headcount index of all non-empty parameters." },
-        { name: "MAX", level: "Beginner", desc: "Isolates and prints out the absolute highest index value within given parameters." },
-        { name: "MIN", level: "Beginner", desc: "Isolates and prints out the absolute lowest index value within given parameters." },
-        { name: "UPPER", level: "Beginner", desc: "Forces targeted string element structures wholly into upper-case letters." },
-        { name: "LOWER", level: "Beginner", desc: "Forces targeted string element structures wholly into lower-case letters." },
-        { name: "LEN", level: "Beginner", desc: "Extracts text arrays returning a precise total character counts score integer." },
-        { name: "IF", level: "Advanced", desc: "Processes validation logical criteria checks. Yields argument A if true, argument B if false." },
-        { name: "VLOOKUP", level: "Advanced", desc: "Scans down vertical structural left indexes looking up items inside specified column rows." },
-        { name: "XLOOKUP", level: "Advanced", desc: "Advanced operational vector tool scanning any column array mapping parallel items instantly." },
-        { name: "INDEX", level: "Advanced", desc: "References table rows and column cross coordinates returning the value of cell intersections." },
-        { name: "MATCH", level: "Advanced", desc: "Validates string/numeric locations returning the exact relative step position index." },
-        { name: "SUMIFS", level: "Advanced", desc: "Aggregates rows calculations only if data arrays fulfill multiple unique matching rules." },
-        { name: "COUNTIFS", level: "Advanced", desc: "Calculates total row volume metrics satisfying multi-layered conditional arrays." },
-        { name: "CONCAT", level: "Advanced", desc: "Fuses disparate standalone string chains cleanly into one comprehensive unified array." },
-        { name: "ROUND", level: "Advanced", desc: "Truncates floating decimal items down cleanly onto selected parameter indices." }
-    ];
-
-    // Hydrate tables and vertical looping sidebars programmatically
-    const tableBody = document.getElementById("registryTableBody");
-    const marqueeTrack = document.getElementById("marqueeTrack");
-
-    // Populate data loops
-    datasetRegistry.forEach(f => {
-        let badgeClass = f.level === "Beginner" ? "beg" : "adv";
+    <div class="master-wrapper">
         
-        // Inject Rows into Main Registry Grid
-        tableBody.innerHTML += `<tr class="data-row-node">
-            <td><span class="formula-tag">${f.name}</span></td>
-            <td><span class="tag-badge ${badgeClass}">${f.level}</span></td>
-            <td style="color: #94a3b8;">${f.desc}</td>
-        </tr>`;
-    });
-
-    // Populate Side Marquee Ticker Track twice to achieve completely uninterrupted circular loops
-    const doubleList = [...datasetRegistry, ...datasetRegistry];
-    doubleList.forEach(f => {
-        marqueeTrack.innerHTML += `<div class="ticker-card">
-            <div class="card-name">${f.name}()</div>
-            <div class="card-use">${f.desc}</div>
-        </div>`;
-    });
-
-    // Handle structural view display switches
-    function switchViewSection(targetId) {
-        document.querySelectorAll(".app-view").forEach(v => v.classList.remove("active-view"));
-        document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active-tab"));
-        
-        document.getElementById(targetId).classList.add("active-view");
-        if(targetId === "reference-view") document.getElementById("navBtn1").classList.add("active-tab");
-        else document.getElementById("navBtn2").classList.add("active-tab");
-    }
-
-    // Live search tracking query parser
-    function filterRegistryRows() {
-        let entryQuery = document.getElementById("filterInput").value.toLowerCase();
-        let tableRows = document.querySelectorAll(".data-row-node");
-        
-        tableRows.forEach(row => {
-            let innerContent = row.textContent.toLowerCase();
-            row.style.display = innerContent.includes(entryQuery) ? "" : "none";
-        });
-    }
-
-    // High performance calculation sandboxed runtime matrix
-    function processSpreadsheetRuntime() {
-        let cleanInput = document.getElementById("formulaInputLine").value.trim();
-        let outputConsole = document.getElementById("cellMatrixOutput");
-
-        if (!cleanInput.startsWith("=")) {
-            outputConsole.innerHTML = <span style="color:#ff6b6b;">#NAME? (Missing '=')</span>;
-            return;
-        }
-
-        try {
-            let syntaxEvaluatorExpression = cleanInput.substring(1);
-
-            // Establish isolated functional calculations mirror models
-            const SUM = (...params) => params.reduce((acc, current) => acc + parseFloat(current || 0), 0);
-            const AVERAGE = (...params) => SUM(...params) / params.length;
-            const MAX = (...params) => Math.max(...params);
-            const MIN = (...params) => Math.min(...params);
-            const UPPER = (textStr) => String(textStr).toUpperCase();
-            const LOWER = (textStr) => String(textStr).toLowerCase();
-            const LEN = (textStr) => String(textStr).length;
-            const IF = (clause, truthBlock, falseBlock) => clause ? truthBlock : falseBlock;
-            const ROUND = (val, placeScale) => Number(Math.round(val + "e" + placeScale) + "e-" + placeScale);
-
-            let calculatedResult = eval(syntaxEvaluatorExpression);
-
-            if (calculatedResult === undefined || (typeof calculatedResult === "number" && isNaN(calculatedResult))) {
-                outputConsole.innerHTML = <span style="color:#ff6b6b;">#VALUE!</span>;
-            } else {
-                outputConsole.innerHTML = <span style="color:#2ecc71;">${calculatedResult}</span>;
-            }
-
-        } catch (runtimeError) {
-            outputConsole.innerHTML = <span style="color:#ff6b6b;">#ERROR! Check Code Syntax</span>;
-        }
-    }
-</script>
-
-</body>
-</html>
+        <!-- Left Sidebar Module (Duplicated cards to ensure loop seam visibility) -->
+        <aside class="ticker-sidebar">
+            <div class="ticker-title">⚡ Matrix Stream</div>
+            <div class="ticker-container">
+                <div class="ticker-track" id="tickerTrack">
+                    <!-- Set 1 -->
+                    <div class="ticker-card">
+                        <div class="card-name">XLOOKUP</div>
+                        <div class="card-use">Supersedes VLOOKUP logic natively.</div>
+                    </div>
