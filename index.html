@@ -318,13 +318,176 @@
 
     <div class="master-wrapper">
         
-        <!-- Left Sidebar Module (Duplicated cards to ensure loop seam visibility) -->
         <aside class="ticker-sidebar">
             <div class="ticker-title">⚡ Matrix Stream</div>
             <div class="ticker-container">
                 <div class="ticker-track" id="tickerTrack">
-                    <!-- Set 1 -->
                     <div class="ticker-card">
                         <div class="card-name">XLOOKUP</div>
                         <div class="card-use">Supersedes VLOOKUP logic natively.</div>
                     </div>
+                    <div class="ticker-card">
+                        <div class="card-name">LET</div>
+                        <div class="card-use">Local scope variables speed computation paths.</div>
+                    </div>
+                    <div class="ticker-card">
+                        <div class="card-name">LAMBDA</div>
+                        <div class="card-use">Custom functional recursion inside formulas.</div>
+                    </div>
+                    <div class="ticker-card">
+                        <div class="card-name">FILTER</div>
+                        <div class="card-use">Extracts arrays based on structural logic masks.</div>
+                    </div>
+                    <div class="ticker-card">
+                        <div class="card-name">XLOOKUP</div>
+                        <div class="card-use">Supersedes VLOOKUP logic natively.</div>
+                    </div>
+                    <div class="ticker-card">
+                        <div class="card-name">LET</div>
+                        <div class="card-use">Local scope variables speed computation paths.</div>
+                    </div>
+                    <div class="ticker-card">
+                        <div class="card-name">LAMBDA</div>
+                        <div class="card-use">Custom functional recursion inside formulas.</div>
+                    </div>
+                    <div class="ticker-card">
+                        <div class="card-name">FILTER</div>
+                        <div class="card-use">Extracts arrays based on structural logic masks.</div>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <main class="main-workspace">
+            <h1>X-Matrix Workspace</h1>
+            <div class="subtitle">The Ultimate Analytical Engine Shell UI</div>
+
+            <nav class="menu-nav">
+                <button class="nav-btn active-tab" data-target="viewDirectory">Formula Directory</button>
+                <button class="nav-btn" data-target="viewSandbox">Live Sandbox</button>
+            </nav>
+
+            <section id="viewDirectory" class="app-view active-view">
+                <div class="search-container">
+                    <input type="text" id="directorySearch" class="search-input" placeholder="Query matrix vectors... (e.g. XLOOKUP, Dynamic, Beginner)">
+                </div>
+                <div class="table-scroll">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Function</th>
+                                <th>Operational Context Target Description</th>
+                                <th>Syntax</th>
+                                <th>Classification Vector</th>
+                            </tr>
+                        </thead>
+                        <tbody id="directoryTableBody">
+                            <tr>
+                                <td><b>XLOOKUP</b></td>
+                                <td>Scans horizontal or vertical blocks dynamically without side requirements.</td>
+                                <td><span class="formula-tag">=XLOOKUP()</span></td>
+                                <td><span class="tag-badge adv">Advanced</span></td>
+                            </tr>
+                            <tr>
+                                <td><b>LET</b></td>
+                                <td>Allocates program memory variables natively inside a targeted formula cell sequence.</td>
+                                <td><span class="formula-tag">=LET()</span></td>
+                                <td><span class="tag-badge adv">Advanced</span></td>
+                            </tr>
+                            <tr>
+                                <td><b>SUMIFS</b></td>
+                                <td>Gathers multi-conditional range sets to compute clean mathematical totals.</td>
+                                <td><span class="formula-tag">=SUMIFS()</span></td>
+                                <td><span class="tag-badge beg">Beginner</span></td>
+                            </tr>
+                            <tr>
+                                <td><b>VLOOKUP</b></td>
+                                <td>Legacy index matcher layout system strictly limited to left-to-right scans.</td>
+                                <td><span class="formula-tag">=VLOOKUP()</span></td>
+                                <td><span class="tag-badge beg">Beginner</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="viewSandbox" class="app-view">
+                <div class="guide-box">
+                    Execution Status Pipeline: Online. Test your functional expression syntax directly using the simulation console below. Initializer tokens require an standard <code>=</code> operand syntax mapping.
+                </div>
+                <div class="formula-bar-container">
+                    <div class="fx-indicator">fx</div>
+                    <input type="text" id="sandboxFormulaInput" class="formula-bar-field" placeholder="=XLOOKUP(A2, D2:D100, E2:E100)" value="=LAMBDA(x, x * 2)">
+                    <button id="evaluateBtn" class="evaluate-action-btn">Evaluate Matrix</button>
+                </div>
+                <div id="consoleOutput" class="sandbox-output">
+                    // Workspace execution terminal pipeline loaded.<br>
+                    // Input an operational calculation script array block above and fire evaluation loop.
+                </div>
+            </section>
+        </main>
+
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            // 1. View Navigation Routing Engine Logic
+            const navButtons = document.querySelectorAll('.nav-btn');
+            const appViews = document.querySelectorAll('.app-view');
+
+            navButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    navButtons.forEach(b => b.classList.remove('active-tab'));
+                    appViews.forEach(v => v.classList.remove('active-view'));
+
+                    btn.classList.add('active-tab');
+                    const targetViewId = btn.getAttribute('data-target');
+                    document.getElementById(targetViewId).classList.add('active-view');
+                });
+            });
+
+            // 2. Real-time Vector Grid Filtering Module
+            const searchInput = document.getElementById('directorySearch');
+            const tableRows = document.querySelectorAll('#directoryTableBody tr');
+
+            searchInput.addEventListener('input', (e) => {
+                const query = e.target.value.toLowerCase().trim();
+                
+                tableRows.forEach(row => {
+                    const contentString = row.textContent.toLowerCase();
+                    if (contentString.includes(query)) {
+                        row.classList.remove('hidden-row');
+                    } else {
+                        row.classList.add('hidden-row');
+                    }
+                });
+            });
+
+            // 3. Simulated Sandbox Functional Evaluator Script Pipeline
+            const evaluateBtn = document.getElementById('evaluateBtn');
+            const formulaInput = document.getElementById('sandboxFormulaInput');
+            const consoleOutput = document.getElementById('consoleOutput');
+
+            evaluateBtn.addEventListener('click', () => {
+                const expressionsRawValue = formulaInput.value.trim();
+
+                if (!expressionsRawValue.startsWith('=')) {
+                    consoleOutput.innerHTML = `<span style="color: #f87171;">[SYNTAX ERR]: Operation mapping rejected. Calculations must initialize with an '=' assignment variable operand.</span>`;
+                    return;
+                }
+
+                consoleOutput.innerHTML = `<span style="color: #a7f3d0;">[PARSING TOKENS]: Disassembling expression array strings into abstract node trees...</span><br>`;
+                
+                setTimeout(() => {
+                    const standardizedExpression = expressionsRawValue.substring(1).toUpperCase();
+                    const isolatedTargetDirective = standardizedExpression.split('(')[0] || "RAW_MATH_ARRAY";
+
+                    consoleOutput.innerHTML += `<span style="color: #e2e8f0;">[PARSED ENGINE NODE]: Core operational matrix target identified: ${isolatedTargetDirective}()</span><br>`;
+                    consoleOutput.innerHTML += `<span style="color: #38bdf8;">[SUCCESS]: Expression token sequence valid. Compilation returns state code: 200 OK. Simulated garbage data purge complete.</span>`;
+                }, 450);
+            });
+        });
+    </script>
+</body>
+</html>
