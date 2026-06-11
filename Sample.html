@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>X-Matrix: Ultimate Excel Workspace</title>
+    <style>
+        :root {
+            --neon-green: #107c41;
+            --cyber-green: #1f9a55;
+            --dark-bg: #0b0f19;
+            --panel-bg: #131926;
+            --border-color: #222e43;
+            --text-glow: 0 0 10px rgba(31, 154, 85, 0.4);
+        }
+
+        * { box-sizing: border-box; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; }
+        body { 
+            background-color: var(--dark-bg); 
+            color: #e2e8f0;
+            margin: 0; 
+            padding: 30px; 
+            display: flex; 
+            justify-content: center; 
+            min-height: 100vh;
+        }
+
+        /* Ultimate Dashboard Split Layout */
+        .master-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 1300px;
+            gap: 25px;
+        }
+
+        /* LEFT SIDE BAR: VERTICAL INFINITE SCROLLING MARQUEE TICKER */
+        .ticker-sidebar {
+            width: 280px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 20px 15px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            height: 750px;
+            position: relative;
+        }
+
+        .ticker-sidebar::after {
+            content: '';
+            position: absolute;
+            bottom: 0; left: 0; right: 0;
+            height: 60px;
+            background: linear-gradient(transparent, var(--panel-bg));
+            pointer-events: none;
+        }
+
+        .ticker-title {
+            color: #fff;
+            font-size: 13px;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--neon-green);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .ticker-container {
+            flex: 1;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .ticker-track {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            position: absolute;
+            width: 100%;
+            animation: verticalMarquee 35s linear infinite;
+        }
+
+        .ticker-track:hover {
+            animation-play-state: paused;
+        }
+
+        .ticker-card {
+            background: #192234;
+            border-left: 4px solid var(--cyber-green);
+            padding: 12px;
+            border-radius: 0 6px 6px 0;
+            font-size: 12px;
+            transition: 0.2s;
+        }
+
+        .ticker-card .card-name {
+            font-family: 'Consolas', monospace;
+            font-weight: bold;
+            color: #fff;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .ticker-card .card-use {
+            color: #94a3b8;
+            line-height: 1.4;
+        }
+
+        /* RIGHT MAIN PANEL PANELS */
+        .main-workspace {
+            flex: 1;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 35px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 { margin: 0 0 5px 0; font-size: 28px; color: #fff; font-weight: 800; letter-spacing: -0.5px; }
+        .subtitle { color: #94a3b8; font-size: 14px; margin-bottom: 30px; }
+
+        /* Modern Navigation Dashboard Header Controls */
+        .menu-nav {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 25px;
+            background: #0f1420;
+            padding: 6px;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+        }
+
+        .nav-btn {
+            flex: 1;
+            padding: 12px;
+            font-size: 14px;
+            font-weight: 700;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            background: transparent;
+            color: #94a3b8;
+            transition: all 0.2s;
+        }
+
+        .nav-btn.active-tab {
+            background: var(--neon-green);
+            color: #fff;
+            box-shadow: var(--text-glow);
+        }
+
+        .nav-btn:hover:not(.active-tab) {
+            background: #192234;
+            color: #fff;
+        }
+
+        /* App Layout Sections switching */
+        .app-view { display: none; }
+        .active-view { display: block; }
+
+        /* Instant Search filter interface components */
+        .search-container { margin-bottom: 20px; }
+        .search-input {
+            width: 100%;
+            padding: 14px 18px;
+            font-size: 14px;
+            background: #0f1420;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            color: #fff;
+            outline: none;
+            transition: 0.2s;
+        }
+        .search-input:focus {
+            border-color: var(--cyber-green);
+            box-shadow: var(--text-glow);
+        }
+
+        /* Elegant Grid Table Interface Matrix */
+        .table-scroll {
+            max-height: 480px;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+        }
+
+        table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
+        th {
+            background-color: #0f1420;
+            color: var(--cyber-green);
+            padding: 14px;
+            position: sticky;
+            top: 0;
+            border-bottom: 2px solid var(--border-color);
+            font-weight: 700;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+            z-index: 10;
+        }
+
+        td { padding: 14px; border-bottom: 1px solid var(--border-color); vertical-align: top; line-height: 1.5; }
+        tr:hover { background-color: rgba(16, 124, 65, 0.04); }
+
+        .tag-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            font-size: 11px;
+            font-weight: bold;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+        .tag-badge.beg { background: rgba(39, 174, 96, 0.15); color: #2ecc71; border: 1px solid rgba(39, 174, 96, 0.3); }
+        .tag-badge.adv { background: rgba(230, 126, 34, 0.15); color: #e67e22; border: 1px solid rgba(230, 126, 34, 0.3); }
+
+        .formula-tag {
+            font-family: 'Consolas', monospace;
+            color: #ff6b6b;
+            font-weight: bold;
+            background: #221a24;
+            padding: 3px 6px;
+            border-radius: 4px;
+            border: 1px solid rgba(255, 107, 107, 0.2);
+        }
+
+        /* Live Sandbox Sheet UI Engine Layout */
+        .guide-box {
+            background: #101c18;
+            border-left: 4px solid var(--cyber-green);
+            padding: 15px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            border-radius: 0 8px 8px 0;
+            color: #a7f3d0;
+            line-height: 1.6;
+        }
+
+        .formula-bar-container {
+            background: #0f1420;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .fx-indicator {
+            font-family: serif;
+            font-style: italic;
+            font-weight: 900;
+            color: var(--cyber-green);
+            font-size: 22px;
+            margin-right: 15px;
+            user-select: none;
+        }
+
+        .formula-bar-field {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-family: 'Consolas', monospace;
+            font-size: 16px;
+            color: #fff;
+            outline: none;
+        }
+
+        .evaluate-action-btn {
+            background-color: var(--neon-green);
+            color: white;
+            border: none;
+            padding: 15px;
+            font-size: 15px;
+            font-weight: bold;
+            border-radius: 6px;
+            cursor: pointer;
+            width: 100%;
+            transition: 0.2s;
+            box-shadow: var(--text-glow);
+        }
+        .evaluate-action-btn:hover { background-color: #185a34; }
+
+        /* Spreadsheet Grid Display Console Panel */
+        .mock-grid { display: grid; grid-template-columns: 90px 1fr; margin-top: 25px; border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden; }
+        .grid-header-node { background: #0f1420; padding: 14px; font-weight: bold; text-align: center; border-right: 1px solid var(--border-color); font-size: 12px; color: #94a3b8; text-transform: uppercase; }
+        .grid-cell-output { padding: 14px; background: #131926; font-size: 20px; font-weight: bold; font-family: 'Consolas', monospace; color: #fff; }
+
+        /* Vertical Marquee CSS Timeline Loops animation loop profiles */
+        @keyframes verticalMarquee {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-50%); }
+        }
+    </style>
+</head>
+<body>
+
+<div class="master-wrapper">
+    
+    <div class="ticker-sidebar">
+        <div class="ticker-title">⚡ Matrix Active Feeds</div>
+        <div class="ticker-container">
+            <div id="marqueeTrack" class="ticker-track"></div>
+        </div>
+    </div>
+
+    <div class="main-workspace">
+        <h1>EXCEL MATRIX INTERFACE</h1>
+        <div class="subtitle">Complete functional core library indexation running an isolated workspace calculation engine</div>
+
+        <div class="menu-nav">
+            <button id="navBtn1" class="nav-btn active-tab" onclick="switchViewSection('reference-view')">📜 MASTER FUNCTION REGISTRY</button>
+            <button id="navBtn2" class="nav-btn" onclick="switchViewSection('calculator-view')">🧮 SANDBOX CALCULATION CELLS</button>
+        </div>
+
+        <div id="reference-view" class="app-view active-view">
+            <div class="search-container">
+                <input type="text" id="filterInput" class="search-input" placeholder="Type terms instantly to decrypt function maps (e.g., INDEX, SUMIFS, XLOOKUP, IF)..." onkeyup="filterRegistryRows()">
+            </div>
+            
+            <div class="table-scroll">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width: 28%;">Function Token</th>
+                            <th style="width: 22%;">Classification</th>
+                            <th style="width: 50%;">Blueprint Structural Mechanics & Execution</th>
+                        </tr>
+                    </thead>
+                    <tbody id="registryTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <div id="calculator-view" class="app-view">
+            <div class="guide-box">
+                <strong>Spreadsheet Sandbox Initialization Matrix:</strong><br>
+                • Code inputs must compile beginning with an equation definition equals character (<code>=</code>).<br>
+                • High-order compound nesting chains are completely functional. Feel free to execute loops like:<br>
+                <code>=SUM(30, 20, MAX(5, 45)) + IF(15 &gt; 10, 200, 0)</code>
+            </div>
+
+            <div class="formula-bar-container">
+                <div class="fx-indicator">fx</div>
+                <input type="text" id="formulaInputLine" class="formula-bar-field" value="=SUM(50, 75) + AVERAGE(20, 40, 60)">
+            </div>
+            
+            <button class="evaluate-action-btn" onclick="processSpreadsheetRuntime()">COMPUTE WORKSPACE COORDINATES</button>
+
+            <div class="mock-grid">
+                <div class="grid-header-node">Cell A1</div>
+                <div id="cellMatrixOutput" class="grid-cell-output"><span style="color:#2ecc71;">165</span></div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // Production Core Library Dataset containing beginner and advanced arrays
+    const datasetRegistry = [
+        { name: "SUM", level: "Beginner", desc: "Aggregates a series of continuous numerical entries instantly. Format: SUM(10, 20, 30)" },
+        { name: "AVERAGE", level: "Beginner", desc: "Computes the tracking central mathematical balance average mean value of parameters." },
+        { name: "COUNT", level: "Beginner", desc: "Identifies and counts how many distinct cells hold explicit numbers." },
+        { name: "COUNTA", level: "Beginner", desc: "Scans data paths returning an explicit headcount index of all non-empty parameters." },
+        { name: "MAX", level: "Beginner", desc: "Isolates and prints out the absolute highest index value within given parameters." },
+        { name: "MIN", level: "Beginner", desc: "Isolates and prints out the absolute lowest index value within given parameters." },
+        { name: "UPPER", level: "Beginner", desc: "Forces targeted string element structures wholly into upper-case letters." },
+        { name: "LOWER", level: "Beginner", desc: "Forces targeted string element structures wholly into lower-case letters." },
+        { name: "LEN", level: "Beginner", desc: "Extracts text arrays returning a precise total character counts score integer." },
+        { name: "IF", level: "Advanced", desc: "Processes validation logical criteria checks. Yields argument A if true, argument B if false." },
+        { name: "VLOOKUP", level: "Advanced", desc: "Scans down vertical structural left indexes looking up items inside specified column rows." },
+        { name: "XLOOKUP", level: "Advanced", desc: "Advanced operational vector tool scanning any column array mapping parallel items instantly." },
+        { name: "INDEX", level: "Advanced", desc: "References table rows and column cross coordinates returning the value of cell intersections." },
+        { name: "MATCH", level: "Advanced", desc: "Validates string/numeric locations returning the exact relative step position index." },
+        { name: "SUMIFS", level: "Advanced", desc: "Aggregates rows calculations only if data arrays fulfill multiple unique matching rules." },
+        { name: "COUNTIFS", level: "Advanced", desc: "Calculates total row volume metrics satisfying multi-layered conditional arrays." },
+        { name: "CONCAT", level: "Advanced", desc: "Fuses disparate standalone string chains cleanly into one comprehensive unified array." },
+        { name: "ROUND", level: "Advanced", desc: "Truncates floating decimal items down cleanly onto selected parameter indices." }
+    ];
+
+    // Hydrate tables and vertical looping sidebars programmatically
+    const tableBody = document.getElementById("registryTableBody");
+    const marqueeTrack = document.getElementById("marqueeTrack");
+
+    // Populate data loops
+    datasetRegistry.forEach(f => {
+        let badgeClass = f.level === "Beginner" ? "beg" : "adv";
+        
+        // Inject Rows into Main Registry Grid
+        tableBody.innerHTML += `<tr class="data-row-node">
+            <td><span class="formula-tag">${f.name}</span></td>
+            <td><span class="tag-badge ${badgeClass}">${f.level}</span></td>
+            <td style="color: #94a3b8;">${f.desc}</td>
+        </tr>`;
+    });
+
+    // Populate Side Marquee Ticker Track twice to achieve completely uninterrupted circular loops
+    const doubleList = [...datasetRegistry, ...datasetRegistry];
+    doubleList.forEach(f => {
+        marqueeTrack.innerHTML += `<div class="ticker-card">
+            <div class="card-name">${f.name}()</div>
+            <div class="card-use">${f.desc}</div>
+        </div>`;
+    });
+
+    // Handle structural view display switches
+    function switchViewSection(targetId) {
+        document.querySelectorAll(".app-view").forEach(v => v.classList.remove("active-view"));
+        document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active-tab"));
+        
+        document.getElementById(targetId).classList.add("active-view");
+        if(targetId === "reference-view") document.getElementById("navBtn1").classList.add("active-tab");
+        else document.getElementById("navBtn2").classList.add("active-tab");
+    }
+
+    // Live search tracking query parser
+    function filterRegistryRows() {
+        let entryQuery = document.getElementById("filterInput").value.toLowerCase();
+        let tableRows = document.querySelectorAll(".data-row-node");
+        
+        tableRows.forEach(row => {
+            let innerContent = row.textContent.toLowerCase();
+            row.style.display = innerContent.includes(entryQuery) ? "" : "none";
+        });
+    }
+
+    // High performance calculation sandboxed runtime matrix
+    function processSpreadsheetRuntime() {
+        let cleanInput = document.getElementById("formulaInputLine").value.trim();
+        let outputConsole = document.getElementById("cellMatrixOutput");
+
+        if (!cleanInput.startsWith("=")) {
+            outputConsole.innerHTML = <span style="color:#ff6b6b;">#NAME? (Missing '=')</span>;
+            return;
+        }
+
+        try {
+            let syntaxEvaluatorExpression = cleanInput.substring(1);
+
+            // Establish isolated functional calculations mirror models
+            const SUM = (...params) => params.reduce((acc, current) => acc + parseFloat(current || 0), 0);
+            const AVERAGE = (...params) => SUM(...params) / params.length;
+            const MAX = (...params) => Math.max(...params);
+            const MIN = (...params) => Math.min(...params);
+            const UPPER = (textStr) => String(textStr).toUpperCase();
+            const LOWER = (textStr) => String(textStr).toLowerCase();
+            const LEN = (textStr) => String(textStr).length;
+            const IF = (clause, truthBlock, falseBlock) => clause ? truthBlock : falseBlock;
+            const ROUND = (val, placeScale) => Number(Math.round(val + "e" + placeScale) + "e-" + placeScale);
+
+            let calculatedResult = eval(syntaxEvaluatorExpression);
+
+            if (calculatedResult === undefined || (typeof calculatedResult === "number" && isNaN(calculatedResult))) {
+                outputConsole.innerHTML = <span style="color:#ff6b6b;">#VALUE!</span>;
+            } else {
+                outputConsole.innerHTML = <span style="color:#2ecc71;">${calculatedResult}</span>;
+            }
+
+        } catch (runtimeError) {
+            outputConsole.innerHTML = <span style="color:#ff6b6b;">#ERROR! Check Code Syntax</span>;
+        }
+    }
+</script>
+
+</body>
+</html>
