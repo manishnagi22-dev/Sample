@@ -8,10 +8,10 @@
         :root {
             --neon-green: #107c41;
             --cyber-green: #1f9a55;
-            --dark-bg: #0b0f19;
-            --panel-bg: #131926;
-            --border-color: #222e43;
-            --text-glow: 0 0 10px rgba(31, 154, 85, 0.4);
+            --dark-bg: #080b11;
+            --panel-bg: #111622;
+            --border-color: #1e293b;
+            --text-glow: 0 0 15px rgba(31, 154, 85, 0.3);
         }
 
         * { box-sizing: border-box; font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif; }
@@ -25,7 +25,6 @@
             min-height: 100vh;
         }
 
-        /* Ultimate Dashboard Split Layout */
         .master-wrapper {
             display: flex;
             width: 100%;
@@ -33,7 +32,7 @@
             gap: 25px;
         }
 
-        /* LEFT SIDE BAR: VERTICAL INFINITE SCROLLING MARQUEE TICKER */
+        /* LEFT SIDEBAR: BULLETPROOF MARQUEE TICKER */
         .ticker-sidebar {
             width: 280px;
             background: var(--panel-bg);
@@ -42,18 +41,8 @@
             padding: 20px 15px;
             display: flex;
             flex-direction: column;
-            overflow: hidden;
             height: 750px;
             position: relative;
-        }
-
-        .ticker-sidebar::after {
-            content: '';
-            position: absolute;
-            bottom: 0; left: 0; right: 0;
-            height: 60px;
-            background: linear-gradient(transparent, var(--panel-bg));
-            pointer-events: none;
         }
 
         .ticker-title {
@@ -70,32 +59,39 @@
             gap: 8px;
         }
 
+        /* Mask Container hides overflow and creates top/bottom fade */
         .ticker-container {
             flex: 1;
             overflow: hidden;
             position: relative;
+            mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 90%, transparent 100%);
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 10%, #000 90%, transparent 100%);
         }
 
+        /* The Track handles the continuous linear translate motion */
         .ticker-track {
             display: flex;
             flex-direction: column;
             gap: 12px;
-            position: absolute;
-            width: 100%;
-            animation: verticalMarquee 25s linear infinite;
+            padding: 4px 0;
+            animation: scrollStream 20s linear infinite;
         }
 
-        .ticker-track:hover {
+        .ticker-sidebar:hover .ticker-track {
             animation-play-state: paused;
         }
 
         .ticker-card {
-            background: #192234;
+            background: #182030;
             border-left: 4px solid var(--cyber-green);
-            padding: 12px;
-            border-radius: 0 6px 6px 0;
+            padding: 14px;
+            border-radius: 0 8px 8px 0;
             font-size: 12px;
-            transition: 0.2s;
+            transition: background 0.2s;
+        }
+        
+        .ticker-card:hover {
+            background: #1f293d;
         }
 
         .ticker-card .card-name {
@@ -118,7 +114,7 @@
             border: 1px solid var(--border-color);
             border-radius: 12px;
             padding: 35px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             display: flex;
             flex-direction: column;
             height: 750px;
@@ -132,7 +128,7 @@
             display: flex;
             gap: 15px;
             margin-bottom: 25px;
-            background: #0f1420;
+            background: #0b0f17;
             padding: 6px;
             border-radius: 8px;
             border: 1px solid var(--border-color);
@@ -158,21 +154,21 @@
         }
 
         .nav-btn:hover:not(.active-tab) {
-            background: #192234;
+            background: #182030;
             color: #fff;
         }
 
-        /* App Layout Sections switching */
+        /* App Layout View Switcher */
         .app-view { display: none; }
         .active-view { display: flex; flex-direction: column; flex: 1; min-height: 0; }
 
-        /* Instant Search filter interface components */
+        /* Instant Search interface */
         .search-container { margin-bottom: 20px; }
         .search-input {
             width: 100%;
             padding: 14px 18px;
             font-size: 14px;
-            background: #0f1420;
+            background: #0b0f17;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             color: #fff;
@@ -184,18 +180,18 @@
             box-shadow: var(--text-glow);
         }
 
-        /* Elegant Grid Table Interface Matrix */
+        /* Table Components */
         .table-scroll {
             flex: 1;
             overflow-y: auto;
             border: 1px solid var(--border-color);
             border-radius: 8px;
-            background: #0f1420;
+            background: #0b0f17;
         }
 
         table { width: 100%; border-collapse: collapse; font-size: 14px; text-align: left; }
         th {
-            background-color: #0f1420;
+            background-color: #0b0f17;
             color: var(--cyber-green);
             padding: 14px;
             position: sticky;
@@ -233,9 +229,9 @@
             border: 1px solid rgba(255, 107, 107, 0.2);
         }
 
-        /* Live Sandbox Sheet UI Engine Layout */
+        /* Live Sandbox Layout */
         .guide-box {
-            background: #101c18;
+            background: #0f1c16;
             border-left: 4px solid var(--cyber-green);
             padding: 15px;
             font-size: 13px;
@@ -246,14 +242,14 @@
         }
 
         .formula-bar-container {
-            background: #0f1420;
+            background: #0b0f17;
             border: 1px solid var(--border-color);
             border-radius: 6px;
             padding: 10px 15px;
             display: flex;
             align-items: center;
             margin-bottom: 20px;
-            gap: 10px;
+            gap: 15px;
         }
 
         .fx-indicator {
@@ -293,10 +289,9 @@
             box-shadow: var(--text-glow);
         }
 
-        /* Console Output Node */
         .sandbox-output {
             flex: 1;
-            background: #070a12;
+            background: #05070f;
             border: 1px solid var(--border-color);
             border-radius: 8px;
             padding: 20px;
@@ -307,8 +302,8 @@
             line-height: 1.6;
         }
 
-        /* Ticker Vertical Loop Animation Keyframe */
-        @keyframes verticalMarquee {
+        /* This keyframe tracks exactly half the layout size seamlessly */
+        @keyframes scrollStream {
             0% { transform: translateY(0); }
             100% { transform: translateY(-50%); }
         }
@@ -328,31 +323,15 @@
                     </div>
                     <div class="ticker-card">
                         <div class="card-name">LET</div>
-                        <div class="card-use">Local scope variables speed computation paths.</div>
+                        <div class="card-use">Local scope variables speed computation.</div>
                     </div>
                     <div class="ticker-card">
                         <div class="card-name">LAMBDA</div>
-                        <div class="card-use">Custom functional recursion inside formulas.</div>
+                        <div class="card-use">Custom functional recursion inside cells.</div>
                     </div>
                     <div class="ticker-card">
                         <div class="card-name">FILTER</div>
-                        <div class="card-use">Extracts arrays based on structural logic masks.</div>
-                    </div>
-                    <div class="ticker-card">
-                        <div class="card-name">XLOOKUP</div>
-                        <div class="card-use">Supersedes VLOOKUP logic natively.</div>
-                    </div>
-                    <div class="ticker-card">
-                        <div class="card-name">LET</div>
-                        <div class="card-use">Local scope variables speed computation paths.</div>
-                    </div>
-                    <div class="ticker-card">
-                        <div class="card-name">LAMBDA</div>
-                        <div class="card-use">Custom functional recursion inside formulas.</div>
-                    </div>
-                    <div class="ticker-card">
-                        <div class="card-name">FILTER</div>
-                        <div class="card-use">Extracts arrays based on structural logic masks.</div>
+                        <div class="card-use">Extracts arrays based on logic masks.</div>
                     </div>
                 </div>
             </div>
@@ -369,7 +348,7 @@
 
             <section id="viewDirectory" class="app-view active-view">
                 <div class="search-container">
-                    <input type="text" id="directorySearch" class="search-input" placeholder="Query matrix vectors... (e.g. XLOOKUP, Dynamic, Beginner)">
+                    <input type="text" id="directorySearch" class="search-input" placeholder="Query matrix vectors... (e.g. XLOOKUP, Advanced)">
                 </div>
                 <div class="table-scroll">
                     <table>
@@ -390,7 +369,7 @@
                             </tr>
                             <tr>
                                 <td><b>LET</b></td>
-                                <td>Allocates program memory variables natively inside a targeted formula cell sequence.</td>
+                                <td>Allocates program memory variables natively inside a cell sequence.</td>
                                 <td><span class="formula-tag">=LET()</span></td>
                                 <td><span class="tag-badge adv">Advanced</span></td>
                             </tr>
@@ -413,7 +392,7 @@
 
             <section id="viewSandbox" class="app-view">
                 <div class="guide-box">
-                    Execution Status Pipeline: Online. Test your functional expression syntax directly using the simulation console below. Initializer tokens require an standard <code>=</code> operand syntax mapping.
+                    Execution Status Pipeline: Online. Test your expressions using the execution console shell below. Formula expressions must start with an `=` assignment operator token.
                 </div>
                 <div class="formula-bar-container">
                     <div class="fx-indicator">fx</div>
@@ -426,13 +405,19 @@
                 </div>
             </section>
         </main>
-
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             
-            // 1. View Navigation Routing Engine Logic
+            // 1. BULLETPROOF AUTO-AMPLIFIED TICKER STREAM
+            // This reads whatever cards you add, clones them programmatically,
+            // meaning the translate(-50%) logic will scale perfectly EVERY time.
+            const tickerTrack = document.getElementById('tickerTrack');
+            const originalCards = tickerTrack.innerHTML;
+            tickerTrack.innerHTML = originalCards + originalCards;
+
+            // 2. Tab Navigation routing system
             const navButtons = document.querySelectorAll('.nav-btn');
             const appViews = document.querySelectorAll('.app-view');
 
@@ -447,45 +432,37 @@
                 });
             });
 
-            // 2. Real-time Vector Grid Filtering Module
+            // 3. Real-time Search Vector Filters
             const searchInput = document.getElementById('directorySearch');
             const tableRows = document.querySelectorAll('#directoryTableBody tr');
 
             searchInput.addEventListener('input', (e) => {
                 const query = e.target.value.toLowerCase().trim();
-                
                 tableRows.forEach(row => {
-                    const contentString = row.textContent.toLowerCase();
-                    if (contentString.includes(query)) {
-                        row.classList.remove('hidden-row');
-                    } else {
-                        row.classList.add('hidden-row');
-                    }
+                    row.classList.toggle('hidden-row', !row.textContent.toLowerCase().includes(query));
                 });
             });
 
-            // 3. Simulated Sandbox Functional Evaluator Script Pipeline
+            // 4. Simulated Expression Engine Compilation UI
             const evaluateBtn = document.getElementById('evaluateBtn');
             const formulaInput = document.getElementById('sandboxFormulaInput');
             const consoleOutput = document.getElementById('consoleOutput');
 
             evaluateBtn.addEventListener('click', () => {
-                const expressionsRawValue = formulaInput.value.trim();
+                const rawExp = formulaInput.value.trim();
 
-                if (!expressionsRawValue.startsWith('=')) {
-                    consoleOutput.innerHTML = `<span style="color: #f87171;">[SYNTAX ERR]: Operation mapping rejected. Calculations must initialize with an '=' assignment variable operand.</span>`;
+                if (!rawExp.startsWith('=')) {
+                    consoleOutput.innerHTML = `<span style="color: #f87171;">[SYNTAX ERR]: Calculations must initialize with an '=' operand assignment token.</span>`;
                     return;
                 }
 
-                consoleOutput.innerHTML = `<span style="color: #a7f3d0;">[PARSING TOKENS]: Disassembling expression array strings into abstract node trees...</span><br>`;
+                consoleOutput.innerHTML = `<span style="color: #a7f3d0;">[PARSING]: Compiling abstract expression array strings...</span><br>`;
                 
                 setTimeout(() => {
-                    const standardizedExpression = expressionsRawValue.substring(1).toUpperCase();
-                    const isolatedTargetDirective = standardizedExpression.split('(')[0] || "RAW_MATH_ARRAY";
-
-                    consoleOutput.innerHTML += `<span style="color: #e2e8f0;">[PARSED ENGINE NODE]: Core operational matrix target identified: ${isolatedTargetDirective}()</span><br>`;
-                    consoleOutput.innerHTML += `<span style="color: #38bdf8;">[SUCCESS]: Expression token sequence valid. Compilation returns state code: 200 OK. Simulated garbage data purge complete.</span>`;
-                }, 450);
+                    const cleanOp = rawExp.substring(1).toUpperCase().split('(')[0] || "MATH_ARRAY";
+                    consoleOutput.innerHTML += `<span style="color: #e2e8f0;">[NODE TRACE]: Operational core expression identified: ${cleanOp}()</span><br>`;
+                    consoleOutput.innerHTML += `<span style="color: #38bdf8;">[SUCCESS]: Expression token sequence valid. Simulated state status: 200 OK.</span>`;
+                }, 400);
             });
         });
     </script>
